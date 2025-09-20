@@ -11,7 +11,9 @@
   </groups>
   
     <classes>
-      <class name=""/>
+      <class name="evasel.FormTests"/>
+      <class name="evasel.InteractionTests"/>
+      <class name="evasel.DataDrivenStudentFormTests.java"/>
     </classes>
   </test> <!-- Test -->
 </suite> <!-- Suite -->
