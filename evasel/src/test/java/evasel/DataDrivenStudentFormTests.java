@@ -9,6 +9,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
@@ -34,7 +35,7 @@ WebDriver driver;
 	driver.findElement(By.id("firstName")).sendKeys(fname);
 	driver.findElement(By.id("lastName")).sendKeys(lname);
 	driver.findElement(By.id("userEmail")).sendKeys(email);
-	driver.findElement(By.id("gender-radio-1")).sendKeys(gender);
+	driver.findElement(By.xpath("//label[text()='" + gender + "']")).click();
 	driver.findElement(By.id("userNumber")).sendKeys(phoneNo);
 	
 	WebElement ele = driver.findElement(By.id("dateOfBirthInput"));
@@ -43,6 +44,11 @@ WebDriver driver;
 	//driver.findElement(By.id("dateOfBirthInput")).click();
 	
 	Thread.sleep(1000); 
+	
+	JavascriptExecutor js = (JavascriptExecutor)driver;
+	WebElement upic = driver.findElement(By.id("uploadPicture"));
+	((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", upic);
+	
 	
 	WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 	WebElement subjectInput = driver.findElement(By.id("subjectsInput"));
@@ -55,7 +61,6 @@ WebDriver driver;
     Thread.sleep(500);
 	driver.findElement(By.id("currentAddress")).sendKeys("Bangalore");
 	
-	JavascriptExecutor js = (JavascriptExecutor)driver;
 	js.executeScript("window.scrollBy(0, 300);");
 	
 	driver.findElement(By.id("state")).click();
@@ -76,12 +81,14 @@ WebDriver driver;
 	WebDriverWait wait2 = new WebDriverWait(driver, Duration.ofSeconds(15));
 	WebElement confmod = wait2.until(ExpectedConditions.visibilityOfElementLocated(By.className("modal-content")));
 
-	WebElement chknm = wait2.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//td[text()='Student Name']")));
-	WebElement chkemail = wait2.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//td[text()='Student Email']")));
+	WebElement chknm = wait2.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//td[text()='Student Name']/following-sibling::td")));
+	WebElement chkemail = wait2.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//td[text()='Student Email']/following-sibling::td")));
 
-
-     assert chknm.getText().equals(fname + " " + lname);
-     assert chkemail.getText().equals(email);
+	/*Assert.assertEquals(chknm.getText().equals(fname + " " + lname), "Name Matches");
+	Assert.assertEquals(chkemail.getText().equals(email), "Email matchees");*/
+	
+	Assert.assertTrue(chknm.getText().equals(fname + " " + lname));
+	Assert.assertTrue(chkemail.getText().equals(email));
 
 	}
 	
@@ -90,8 +97,8 @@ WebDriver driver;
 		
 		return new Object[][] {
 			
-			{"marco", "flint", "flinto@gmail.com", "male", "1234567890"},
-			{"cicero", "aurelius", "aurora@gmail.com", "male", "0987654321"}
+			{"marco", "flint", "flinto@gmail.com", "Male", "1234567890"},
+			{"cicero", "aurelius", "aurora@gmail.com", "Male", "0987654321"}
 			
 		};
 
