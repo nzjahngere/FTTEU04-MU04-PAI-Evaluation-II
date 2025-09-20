@@ -32,10 +32,15 @@ WebDriver driver;
 	@Test(dataProvider="getData")
 	public void formTest(String fname, String lname, String email, String gender, String phoneNo) throws InterruptedException {
 		
+	JavascriptExecutor js = (JavascriptExecutor)driver;
+
 	driver.findElement(By.id("firstName")).sendKeys(fname);
 	driver.findElement(By.id("lastName")).sendKeys(lname);
 	driver.findElement(By.id("userEmail")).sendKeys(email);
-	driver.findElement(By.xpath("//label[text()='" + gender + "']")).click();
+	
+	WebElement gen = driver.findElement(By.xpath("//label[text()='" + gender + "']"));
+	js.executeScript("arguments[0].click();", gen);
+	
 	driver.findElement(By.id("userNumber")).sendKeys(phoneNo);
 	
 	WebElement ele = driver.findElement(By.id("dateOfBirthInput"));
@@ -45,9 +50,8 @@ WebDriver driver;
 	
 	Thread.sleep(1000); 
 	
-	JavascriptExecutor js = (JavascriptExecutor)driver;
 	WebElement upic = driver.findElement(By.id("uploadPicture"));
-	((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", upic);
+	js.executeScript("arguments[0].scrollIntoView();", upic);
 	
 	
 	WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
@@ -89,6 +93,8 @@ WebDriver driver;
 	
 	Assert.assertTrue(chknm.getText().equals(fname + " " + lname));
 	Assert.assertTrue(chkemail.getText().equals(email));
+	
+	Thread.sleep(4000);
 
 	}
 	
